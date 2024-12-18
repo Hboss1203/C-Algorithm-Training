@@ -1,0 +1,102 @@
+class MyLinkedList {
+public:
+
+    struct LinkedNode
+    {
+        int val;
+        LinkedNode* next;
+        LinkedNode(int val) :val(val), next(nullptr) {}
+    };
+
+    MyLinkedList() {//初始化为虚拟头节点
+        dummyHead = new LinkedNode(0);//这是构造函数，函数名与类名相同。
+        //它会在每次创建 MyLinkedList 类的实例时自动被调用。
+        //new的用法：new 数据类型(数量); 或者 new 数据类型[分配多个空间]
+        size = 0;//初始化数组为0；
+    }
+
+    int get(int index) {//通过下标（不是通过val）查找，那就按下标循环递减。
+        if (index < 0 || index > (size - 1))//index的合法化测试；
+            return -1;
+        LinkedNode* cur = dummyHead->next;//LinkedNode* cur = dummyHead->next;找到index对应的节点。
+        while (index--)//index是从0到4（共5个）;注意-1不是0！
+        {
+            cur = cur->next;
+        }
+        return cur->val;
+    }
+
+    void addAtHead(int val) {
+        LinkedNode* newHead = new LinkedNode(val);
+        newHead->next = dummyHead->next;
+        dummyHead->next = newHead;
+        size++;//添加了节点，要记录啊。
+    }
+
+    void addAtTail(int val) {
+        LinkedNode* cur = dummyHead;// LinkedNode* cur = dummyHead;是找到目标节点的前一个节点
+        //LinkedNode* newNode; //不要这样创建新指针，除非你能马上为其制定内存空间（如上行）
+        LinkedNode* newNode = new LinkedNode(val);
+        //newNode->next = nullptr;//不需要了，在前面构造函数的时候，就说初始化为Nullptr
+        while (cur->next != nullptr)//翻到最后一页
+        {
+            cur = cur->next;//翻页
+        }
+        cur->next = newNode;
+        size++;//添加了节点，要记录啊。
+    }
+
+    void addAtIndex(int index, int val) {
+        if (index > size) return;//直接跳出函数 注意：我们此时的链表是多算了一个dummyHead的，所以不是index>size - 1； 而是index>size；
+        if (index < 0) index = 0;
+        LinkedNode* cur = dummyHead;// LinkedNode* cur = dummyHead;是找到目标节点的前一个节点
+        //LinkedNode* newNode; //声明时不能赋值
+        LinkedNode* newNode = new LinkedNode(val);
+        /*
+        if (index == 0)//头插情况
+            addAtHead(val);
+        else
+        {
+            int indexAhead = index - 1;
+            while (indexAhead--)//获取目标节点的前一节点
+            {
+                cur = cur->next;
+            }
+            cur->next = newNode;
+        }
+        */
+        while (index--)
+        {
+            cur = cur->next;
+        }
+        newNode->next = cur->next;
+        cur->next = newNode;
+        size++;//添加了节点，要记录啊。
+    }
+
+    void deleteAtIndex(int index) {
+        /*//要更改被删节点的上一个节点
+        LinkedNode* cur = dummyHead->next;
+        if(index<0||index>size-1)
+            return;
+        while(index--)
+        {
+            cur = cur->next;
+        }
+        delete(cur);
+        size--;//删除了节点，要记录啊。
+        */
+        if (index < 0 || index >= size) return; // 检查合法性
+        LinkedNode* cur = dummyHead; // LinkedNode* cur = dummyHead;是找到目标节点的前一个节点
+        while (index--) {  // 找到待删除节点的前一个节点
+            cur = cur->next;
+        }
+        LinkedNode* toDelete = cur->next; // 待删除的节点
+        cur->next = cur->next->next; // 删除节点，并跳过它
+        delete toDelete; // 释放待删除节点的内存
+        size--; // 更新链表的大小
+    }
+private:
+    int size;
+    LinkedNode* dummyHead;
+};
