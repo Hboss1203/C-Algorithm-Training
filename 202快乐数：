@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int getSum(int n)
+            {
+                int sum = 0;
+                while(n)
+                {
+                    sum += (n%10) * (n%10);//算个位的平方，并将其加入sum中
+                    n = n/10;
+                }
+                return sum;
+            }
+
+    bool isHappy(int n) 
+    {
+        unordered_set<int> sum_set;
+        while(1)
+        {
+            int sum = getSum(n);
+            if(sum == 1)
+            {
+                return true;
+            }
+            if(sum_set.find(sum) != sum_set.end())//没找到相同sum就返回.end；找到了，就说明不是快乐数。
+            {
+                return false;
+            }
+            else
+            {
+                sum_set.insert(sum);//将当前sum记录。
+            }
+            n = sum;//下一个循环
+        }
+    }
+};
