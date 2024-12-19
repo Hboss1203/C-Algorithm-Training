@@ -1,0 +1,58 @@
+哈希数组（错误解法：此时必须假设nums属于[0,9]。但实际上是[0,1000]）
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        int hash[10] = {0};
+        std::vector<int> result;  // 空的动态大小数组
+        for(int i =0; i < nums1.size(); i++)
+        {
+            hash[nums1[i]-'0']++;//nums1的加统计；
+        }
+        for(int i=0; i < 10; i++)
+        {
+            if(hash[i] != 0)//nums1中有值:i
+            {
+                for(int j=0; j < nums2.size(); j++)
+                {
+                    if(nums2[j] == i)
+                        result.push_back(i);
+                }
+            }
+        }
+        return result;
+    }
+};
+
+哈希数组利用unorderset来去重：
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result_set;//利用unorderset来为结果集去重。
+        int hash[1001] = {0};
+        for(int i =0; i < nums1.size(); i++)
+        {
+            hash[nums1[i]] = 1;//nums1有的位置置于1；
+        }
+        for(int i=0; i < nums2.size(); i++)
+        {
+            if(hash[nums2[i]] == 1)//nums2有的位置置于1；
+                result_set.insert(nums2[i]);
+        }
+        return vector<int>(result_set.begin(), result_set.end());//unorderset
+    }
+};
+
+哈希unorderedset（需要对C++开展研究：迭代器与容器）
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result_set;//利用unorderset来为结果集去重。
+        unordered_set<int> nums_set(nums1.begin(),nums1.end());//以nums1为头尾设计nums_set。
+        for(int num : nums2)
+        {
+            if(nums_set.find(num) != nums_set.end())//没找到num，就会返回.end
+                result_set.insert(num);
+        }
+        return vector<int>(result_set.begin(), result_set.end());
+    }
+};
