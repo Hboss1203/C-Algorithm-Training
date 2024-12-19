@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        std::unordered_map<int,int> map;
+        for(int i = 0; i < nums.size(); i++)
+        {
+            auto iter = map.find(target - nums[i]);//向前找已遍历过的元素中是否有对应组合
+            if(iter != map.end())//找到了
+                return {iter->second, i};//将map_key(second：元素)和map_value：下标返回
+            //若没找到匹配对，就将访问过的元素和下标加入map：
+            map.insert(pair<int,int>(nums[i],i));
+        }
+        return {};
+    }
+};
