@@ -1,0 +1,41 @@
+class Solution {//本质上是在三数相加上套了一层循环
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {//因为用双指针，所以大于二的分支只能遍历。
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+        for (int k = 0; k < nums.size(); k++)
+        {
+            if(nums[k] > target && nums[k] > 0 && target > 0)//k剪枝(基于全正数情况)
+                break;//将该k枝剪掉
+            if(k > 0 && nums[k] == nums[k-1])//k去重
+                continue;
+            for (int i = k + 1; i < nums.size(); i++)
+            {
+                if((nums[k] + nums[i]) > target && (nums[k] + nums[i]) > 0 && target > 0)//i剪枝
+                    break;
+                if(i > k + 1 && nums[i] == nums[i-1])//i去重
+                    continue;
+
+                int left = i + 1;
+                int right = nums.size() - 1;
+
+                while(right > left)
+                {
+                    if(nums[k] + nums[i] + nums[left] + nums[right] > target) right--;
+                    else if(nums[k] + nums[i] + nums[left] + nums[right] < target) left++;
+                    else
+                    {
+                        result.push_back(vector<int>{nums[k], nums[i], nums[left], nums[right]});
+                        while(right > left && nums[right] == nums[right - 1]); right--;//c去重
+                        while(right > left && nums[left] == nums[left + 1]); left++;//d去重
+
+                        //找到答案，双指针收缩
+                        right--;
+                        left++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
