@@ -1,0 +1,43 @@
+class MyQueue {
+public:
+    stack<int> stIn;
+    stack<int> stOut;
+    MyQueue() {
+        
+    }
+    
+    void push(int x) {//入栈接受元素
+        stIn.push(x);
+    }
+    
+    int pop() {
+        if (stOut.empty()){
+            while(!stIn.empty()){
+                stOut.push(stIn.top());//将入栈的top元素移入出栈，从而实现队列功能
+                stIn.pop();
+            }
+        }
+        int result = stOut.top();
+        stOut.pop();
+        return result;
+    }
+    
+    int peek() {
+        int res = this -> pop();//如果类中有一个 pop() 函数，该代码表示调用 pop() 并将结果赋值给 res。
+        stOut.push(res);
+        return res;
+    }
+    
+    bool empty() {
+        return stIn.empty() && stOut.empty();
+    }
+};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */
