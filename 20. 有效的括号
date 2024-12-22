@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        if (s.size() % 2 != 0) return false;//将所有奇数组去除
+        stack<char> st;
+        for(int i = 0; i < s.size();i++)
+        {
+            if(s[i] == '(') st.push(')');
+            else if(s[i] == '[') st.push(']');
+            else if(s[i] == '{') st.push('}');
+
+            else if(st.empty() || st.top() != s[i]) return false;
+            //empty()是第三种情况；top != s是第二种
+            else st.pop();// st.top() 与 s[i]相等，栈弹出元素
+        }
+        // 第一种情况：此时我们已经遍历完了字符串，但是栈不为空，
+        //说明有相应的左括号没有右括号来匹配，所以return false，否则就return true
+        return st.empty();
+    }
+};
