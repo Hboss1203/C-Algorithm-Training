@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        if(root == NULL) return 0;
+        //左
+        int leftNum = sumOfLeftLeaves(root->left);
+        if(root->left != NULL && root->left->left == NULL && root->left->right == NULL){
+            leftNum = root->left->val;
+        }
+        //右
+        int rightNum = sumOfLeftLeaves(root->right);
+        //中
+        int sum = leftNum + rightNum;
+        return sum;
+    }
+};
