@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int maxDepth = INT_MIN;
+    int result;
+
+    void traversal(TreeNode* node, int depth){
+        if(node->left == NULL && node->right == NULL)//找到叶子节点了
+        {
+            if(depth > maxDepth){
+            maxDepth = depth;
+            result = node->val;
+            }
+        }
+        if(node->left){//先left，能确保每一深度，先找左下角的值。
+            depth++;//进入node-》left层
+            traversal(node->left, depth);
+            depth--;
+        }
+        if(node->right){
+            depth++;
+            traversal(node->right, depth);
+            depth--;
+        }
+    }
+
+    int findBottomLeftValue(TreeNode* root) {
+        traversal(root, 0);
+        return result;
+    }
+};
