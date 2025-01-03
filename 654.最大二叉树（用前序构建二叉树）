@@ -1,0 +1,31 @@
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        TreeNode* node = new TreeNode(0);
+        //终止条件：叶子节点
+        if(nums.size() == 1){
+            node->val = nums[0];
+            return node;
+        }
+        //找最大值
+        int maxValue = 0;
+        int Index = 0;//用于分割数组；
+        for(int i = 0; i < nums.size(); i++){
+            if(nums[i] > maxValue){
+                maxValue = nums[i];
+                Index = i;
+            }
+        }
+        node->val = maxValue;
+        //分割数组
+        if(Index > 0){//说明数组有左子树
+            vector<int> leftVec(nums.begin(), nums.begin()+Index);
+            node->left = constructMaximumBinaryTree(leftVec);
+        }
+        if(Index < (nums.size() - 1)){//说明有右子树
+            vector<int> rightVec(nums.begin()+Index+1, nums.end());
+            node->right = constructMaximumBinaryTree(rightVec);
+        }
+        return node;
+    }
+};
