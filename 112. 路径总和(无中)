@@ -1,0 +1,30 @@
+class Solution {
+private:
+    bool traversal(TreeNode* root, int targetSum) {
+        if(root == NULL) return false;
+        if(root->left == NULL && root->right == NULL && targetSum == 0) return true;
+        if(root->left == NULL && root->right == NULL && targetSum != 0) return false;
+
+        if(root->left){//左
+            targetSum -= root->left->val;
+            if(traversal(root->left, targetSum)){
+                return true;
+            }    
+            targetSum += root->left->val;
+        }
+
+        if(root->right){//右
+            targetSum -= root->right->val;
+            if(traversal(root->right, targetSum)){
+                return true;
+            }    
+            targetSum += root->right->val;
+        }
+        return false;
+    }
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+            if (root == NULL) return false;
+            return traversal(root, sum - root->val);//要将第一个值先排除.
+        }
+};
