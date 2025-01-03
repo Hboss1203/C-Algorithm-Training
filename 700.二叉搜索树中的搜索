@@ -1,0 +1,16 @@
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        //结束条件
+        if(root == NULL || root->val == val) return root;
+        //递归
+        TreeNode* result = NULL;//创造数组
+        if(root->val > val){//root->val大于val，意味着val在左子树中（较小的一棵书）
+            result = searchBST(root->left, val);
+        }
+        if(root->val < val){
+            result = searchBST(root->right, val);
+        }
+        return result;
+    }
+};
