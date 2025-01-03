@@ -1,0 +1,41 @@
+class Solution {
+
+private:
+    TreeNode* traversal(vector<int>& inorder, vector<int>& postorder){
+        if(postorder.size() == 0) return NULL;
+        //若不为空，则提取节点。
+        int RootValue = postorder[postorder.size() - 1];
+        TreeNode* root = new TreeNode(RootValue);//这导致 new[] 和 delete 不匹配，从而触发了 alloc-dealloc-mismatch 错误。
+        //如果到达叶子节点，也返回root。
+        if(postorder.size() == 1) return root;
+
+        //寻找根节点在中序数组中的位置。
+        int index;
+        for(index = 0; index < inorder.size(); index++){
+            if(inorder[index] == RootValue) break;//此时的index为根节点坐标。
+        }
+
+        //中序切割(自动左闭右开)(以根节点进行切割)
+        vector<int> leftInorder(inorder.begin(), inorder.begin() + index);
+        vector<int> rightInorder(inorder.begin() + index + 1, inorder.end());
+        
+        //舍去后序中，刚用过的根节点。(方便后序切割)
+        postorder.resize(postorder.size() - 1);//缩小
+
+        //后序切割（以左中序数组切割：切了左的，剩下的就是右的，老根已经切掉了）
+        vector<int> leftPostorder(postorder.begin(), postorder.begin() + leftInorder.size());
+        vector<int> rightPostorder(postorder.begin() + leftInorder.size(), postorder.end());
+
+        //对左右空间进行递归
+        root->left = traversal(leftInorder, leftPostorder);//左空间递归
+        root->right = traversal(rightInorder, rightPostorder);//右空间递归
+
+        return root;
+    }
+
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if (inorder.size() == 0 || postorder.size() == 0) return NULL;
+        return traversal(inorder, postorder);
+    }
+};
